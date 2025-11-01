@@ -6,10 +6,10 @@ import { LuMaximize2 } from "react-icons/lu";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
 
 const MockNavbar = () => (
-    <Navbar/>
+    <Navbar />
 );
 
-const API_BASE_URL = 'http://54.162.63.219:8000';
+const API_BASE_URL = 'http://23.20.239.239:5000';
 
 
 const PreviewContent = () => {
@@ -161,12 +161,12 @@ const PreviewContent = () => {
 
                     <button onClick={toggleMaximize} className="absolute top-2 right-2 z-10 p-2 bg-black bg-opacity-40 rounded-full hover:bg-opacity-60 transition-all">
                         {isPreviewMaximized ? (
-                            <TbArrowsDiagonalMinimize/>
+                            <TbArrowsDiagonalMinimize />
                         ) : (
-                            <LuMaximize2/>
+                            <LuMaximize2 />
                         )}
                     </button>
-                    
+
                     <iframe
                         srcDoc={generatedHtml}
                         title="Website Preview"
