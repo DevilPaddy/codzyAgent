@@ -1,7 +1,9 @@
 import React from 'react';
-import Footer from '../../components/Footer';
-import IdeasHome from '../../components/ideas';
-import Tutorials from '../../components/tutorials';
+import useAuthStore from '../store/authStore';
+import '../navbar.css';
+import IdeasHome from './ideasHome';
+import Tutorials from './Tutorials';
+import Footer from './Footer';
 
 const Home = () => {
 
