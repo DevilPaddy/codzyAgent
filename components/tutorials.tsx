@@ -9,40 +9,32 @@ const Tutorials = () => {
         {/* Tutorial 1 */}
         <div>
           <div
-            className="w-full h-[28rem] sm:h-[30rem] md:h-[33rem] rounded-[12px] bg-no-repeat bg-contain bg-center bg-[#EEEFF3] p-4 sm:p-6 md:p-8 flex flex-col justify-between items-start"
+            className="w-full h-[28rem] sm:h-[30rem] md:h-[33rem] rounded-[12px] bg-no-repeat bg-contain bg-center bg-[#EEEFF3] border shadow-sm
+            hover:scale-[102%] ease-in-out duration-150 border-zinc-200 p-4 sm:p-6 md:p-8 flex flex-col justify-between items-start"
             style={{ backgroundImage: "url('/tutorial1.jpg')" }}
           >
-            <h4 className="text-xl sm:text-2xl md:text-3xl text-black font-bold mb-4">
-              Learn to create website from just using prompt
-            </h4>
-            <a
-              href=""
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 sm:px-6 py-2 rounded-lg text-white bg-violet-700 hover:bg-violet-800 transition"
-            >
-              Explore
-            </a>
+            <div className="h-full flex flex-col justify-between">
+              <h4 className="text-xl sm:text-2xl md:text-3xl text-black font-bold mb-4">
+                Learn to create website from just using prompt
+              </h4>
+              <p className='font-semibold text-zinc-700'>Watch Tutorial👉</p>
+            </div>
           </div>
         </div>
 
         {/* Tutorial 2 */}
         <div>
           <div
-            className="w-full h-[28rem] sm:h-[30rem] md:h-[33rem] rounded-[12px] bg-no-repeat bg-contain bg-center bg-white p-4 sm:p-6 md:p-8 flex flex-col justify-between items-start"
+            className="w-full h-[28rem] sm:h-[30rem] md:h-[33rem] rounded-[12px] bg-no-repeat bg-contain bg-center
+            hover:scale-[102%] ease-in-out duration-150 bg-white border shadow-sm border-zinc-200 p-4 sm:p-6 md:p-8 flex flex-col justify-between items-start"
             style={{ backgroundImage: "url('/tutorial2.jpg')" }}
           >
-            <h4 className="text-xl sm:text-2xl md:text-3xl text-black font-bold mb-4">
-              Learn to deploy your website in simple steps
-            </h4>
-            <a
-              href=""
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 sm:px-6 py-2 rounded-lg text-white bg-violet-700 hover:bg-violet-800 transition"
-            >
-              Explore
-            </a>
+            <div className="h-full flex flex-col justify-between">
+              <h4 className="text-xl sm:text-2xl md:text-3xl text-black font-bold mb-4">
+                Learn to deploy your website in simple steps
+              </h4>
+              <p className='font-semibold text-zinc-700'>Watch Tutorial👉</p>
+            </div>
           </div>
         </div>
       </div>

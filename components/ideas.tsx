@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ideaData = [
-  { id: 1, image: '/idea1.jng', title: 'Portfolio’s idea', url: 'https://example.com/idea1' },
+  { id: 1, image: '/idea0.png', title: 'Portfolio’s idea', url: 'https://example.com/idea1' },
   { id: 2, image: '/idea2.jpg', title: 'Landing pages', url: 'https://example.com/idea2' },
   { id: 3, image: '/idea3.jpg', title: 'Product page', url: 'https://example.com/idea3' },
   { id: 4, image: '/idea4.jpg', title: 'Other ideas', url: 'https://example.com/idea4' },
@@ -17,7 +17,8 @@ const IdeasHome = () => {
         {ideaData.map(({ id, image, title, url }) => (
           <div
             key={id}
-            className="relative h-[28rem] bg-white rounded-[12px] bg-center bg-no-repeat bg-contain"
+            className="relative h-[28rem] bg-white rounded-[12px] bg-center border shadow-sm border-zinc-200 bg-no-repeat bg-contain
+            hover:scale-[102%] ease-in-out duration-150"
             style={{ backgroundImage: `url(${image})` }}
           >
             <div className="absolute inset-0 p-4 rounded-xl flex flex-col justify-between items-start">
@@ -26,7 +27,7 @@ const IdeasHome = () => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2 rounded-lg bg-violet-700 hover:bg-violet-800 transition text-white"
+                className="px-6 py-2 rounded-full bg-violet-700 hover:bg-violet-800 transition text-white"
               >
                 Explore
               </a>
