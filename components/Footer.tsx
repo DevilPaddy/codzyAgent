@@ -22,7 +22,7 @@ const Footer = () => {
       </ul>
 
       <div className="mt-4 text-center text-zinc-600 text-sm">
-        <p>© 2025 VoxBuilder. All rights reserved.</p>
+        <p>© 2025 Codzy. All rights reserved.</p>
       </div>
     </footer>
   );

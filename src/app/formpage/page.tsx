@@ -42,49 +42,49 @@ const Page = () => {
             {/* nav section */}
             <Navbar />
             <div className="formpage">
-                <div className="form-container w-full md:px-[2vw] flex content-center justify-center py-[3vw] md:py-[6vw]">
-                    <form onSubmit={handleSubmit} className="md:w-[45%] px-[2vw] py-[2.45vw] rounded-[12px] border-[1.4px] border-zinc-700">
-                        <label className="block mb-2 text-zinc-500">
+                <div className="form-container w-full h-screen px-[.6em] flex content-center mt-[-6rem] md:mt-0.5 items-center justify-center">
+                    <form onSubmit={handleSubmit} className="md:w-[45%] px-[2vw] py-[2.45vw] rounded-[12px] border-[1px] border-zinc-400">
+                        <label className="block mb-2 text-zinc-900">
                             What is the main purpose of your landing page?
                             <input
                                 type="text"
                                 name="purpose"
                                 value={formData.purpose}
                                 onChange={handleChange}
-                                className="w-full border p-2 rounded"
+                                className="w-full border border-zinc-500 p-2 rounded"
                             />
                         </label>
 
-                        <label className="block mb-2 text-zinc-500">
+                        <label className="block mb-2 text-zinc-900">
                             What sections do you want on the page?
                             <input
                                 type="text"
                                 name="sections"
                                 value={formData.sections}
                                 onChange={handleChange}
-                                className="w-full border p-2 rounded"
+                                className="w-full border border-zinc-500 p-2 rounded"
                             />
                         </label>
 
-                        <label className="block mb-2 text-zinc-500">
+                        <label className="block mb-2 text-zinc-900">
                             Would you like a light, dark or colorfull theme for your page?
                             <input
                                 type="text"
                                 name="theme"
                                 value={formData.theme}
                                 onChange={handleChange}
-                                className="w-full border p-2 rounded"
+                                className="w-full border border-zinc-500 p-2 rounded"
                             />
                         </label>
 
-                        <label className="block mb-4 text-zinc-500">
+                        <label className="block mb-4 text-zinc-900">
                             What is the name of your website or brand?
                             <input
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full border p-2 rounded"
+                                className="w-full border border-zinc-500 p-2 rounded"
                             />
                         </label>
 

@@ -1,31 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1A1A1A;
+  --foreground: #FFFFFF;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-playfair);
+  --font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1A1A1A;
+    --foreground: #FFFFFF;
   }
 }
 
 body {
-  background: var(--background);
+  /* background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%); */
+  background: var(--foreground);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
-textarea{
+
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", serif;
+  }
+}
+
+textarea {
   overflow: hidden;
+}
+
+.nav-title{
+  background-image: linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.home {
+  position: relative;
+  max-width: 1152px;
+  max-height: 1152px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1A1A1A;
+}
+
+.hero-cover {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 4em;
+}
+
+.hero-title-txt {
+  font-size: clamp(3rem, 3em + 1rem, 6rem);
+  font-weight: bolder;
+  text-align: center;
+}
+
+
+.hero-title-txt-span {
+  padding: .1em .5em;
+  background-image: linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%);
+  border-radius: 1000px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.hero-para-txt {
+  font-size: clamp(.81rem, .1em + 1rem, 1.2rem);
+  line-height: 2rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.btn-sec {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+  font-size: clamp(1rem, .1em + 1rem, 1.2rem);
+  font-weight: 600;
+}
+
+.btn {
+  padding: 1em 3em;
+  max-height: 3rem;
+  max-width: 5rem;
+  border: 1px solid;
+  border-radius: 10000px;
+  transition: all .2s ease-in-out;
+}
+
+.signup-btn {
+  background: #000000;
+  color: #ffffff;
+}
+
+.login-btn {
+  border-color: #000000;
+}
+
+.btn:hover {
+  background: #494949;
+  color: #ffffff;
+}
+
+
+
+@media screen and (max-width: 767px) {
+  .hero-cover {
+    width: 100%;
+    padding: 0.2em;
+  }
 }

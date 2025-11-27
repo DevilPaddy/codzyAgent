@@ -9,16 +9,16 @@ const ideaData = [
 
 const IdeasHome = () => {
   return (
-    <div className="w-full mt-12 mb-12">
-      <h6 className="text-white text-lg m-4">Ideas:</h6>
+    <div className="w-full mb-12">
+      <h6 className="text-black text-lg m-4">Ideas:</h6>
 
       {/* Responsive Grid: 1 col on mobile, 2 on md+ */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 md:px-8">
         {ideaData.map(({ id, image, title, url }) => (
           <div
             key={id}
-            className="relative h-[28rem] bg-white rounded-[12px] bg-center border shadow-sm border-zinc-200 bg-no-repeat bg-contain
-            hover:scale-[102%] ease-in-out duration-150"
+            className="relative h-[28rem] bg-white rounded-[12px] bg-center border-[1px] border-zinc-500 bg-no-repeat bg-contain
+            hover:scale-[102%] ease-in-out duration-250"
             style={{ backgroundImage: `url(${image})` }}
           >
             <div className="absolute inset-0 p-4 rounded-xl flex flex-col justify-between items-start">
@@ -27,7 +27,7 @@ const IdeasHome = () => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2 rounded-full bg-violet-700 hover:bg-violet-800 transition text-white"
+                className="px-6 py-2 rounded-full bg-black hover:bg-zinc-800 transition text-white"
               >
                 Explore
               </a>

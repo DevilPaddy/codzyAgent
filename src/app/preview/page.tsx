@@ -1,30 +1,25 @@
 'use client'
 import React, { useCallback, useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Navbar from '../../../components/Navbar'
-import { LuMaximize2 } from "react-icons/lu";
+import Navbar from '../../../components/Navbar' 
+import { LuMaximize2, LuLoader } from "react-icons/lu";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
-
-const MockNavbar = () => (
-    <Navbar />
-);
+import { FiDownload, FiSend } from "react-icons/fi";
 
 const API_BASE_URL = 'http://23.20.239.239:5000';
 
-
 const PreviewContent = () => {
     const searchParams = useSearchParams();
-    const initialPrompt = searchParams.get('prompt'); // Get prompt from URL
+    const initialPrompt = searchParams.get('prompt');
 
-    const [prompt, setPrompt] = useState({ text: '' }); // For the edit textarea
+    const [prompt, setPrompt] = useState({ text: '' });
     const [isLoading, setIsLoading] = useState(false);
-    const [generatedHtml, setGeneratedHtml] = useState(''); // Start with empty HTML
+    const [generatedHtml, setGeneratedHtml] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isPreviewMaximized, setIsPreviewMaximized] = useState(false);
     const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
 
-
-    // Effect for the INITIAL website generation from the form page data
+    // Initial Load Effect
     useEffect(() => {
         if (initialPrompt && !hasLoadedInitial) {
             const generateInitialWebsite = async () => {
@@ -37,12 +32,11 @@ const PreviewContent = () => {
                         body: JSON.stringify({ text: initialPrompt }),
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    
                     const html = await response.text();
                     setGeneratedHtml(html);
-                    setHasLoadedInitial(true); // Mark initial load as complete
+                    setHasLoadedInitial(true);
                 } catch (err: any) {
                     setError(err.message || "Failed to load initial page.");
                 } finally {
@@ -53,12 +47,10 @@ const PreviewContent = () => {
         }
     }, [initialPrompt, hasLoadedInitial]);
 
-
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setPrompt({ ...prompt, [e.target.name]: e.target.value });
     };
 
-    // This function now handles EDITS to the already generated HTML
     const handleGenerate = useCallback(async () => {
         if (!prompt.text.trim()) {
             setError("Prompt cannot be empty.");
@@ -73,23 +65,18 @@ const PreviewContent = () => {
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({
                     text: prompt.text,
-                    html: generatedHtml // Send current HTML for editing
+                    html: generatedHtml
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const newHtml = await response.text();
             setGeneratedHtml(newHtml);
             setPrompt({ text: '' });
-        }
-        catch (err: any) {
+        } catch (err: any) {
             setError(err.message || "An unknown error occurred.");
-            console.error("Failed to generate HTML:", err);
-        }
-        finally {
+        } finally {
             setIsLoading(false);
         }
     }, [prompt, generatedHtml]);
@@ -101,103 +88,144 @@ const PreviewContent = () => {
 
     const handleDownload = useCallback(() => {
         if (!generatedHtml) {
-            alert("There is no website content to download.");
+            alert("No content to download.");
             return;
         }
         const blob = new Blob([generatedHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'index.html';
+        a.download = 'codzy-project.html';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }, [generatedHtml]);
 
-    const toggleMaximize = () => {
-        setIsPreviewMaximized(!isPreviewMaximized);
-    };
+    const toggleMaximize = () => setIsPreviewMaximized(!isPreviewMaximized);
 
-    // Display a loading message for the initial generation
-    if (isLoading && !hasLoadedInitial) {
-        return <div className="flex items-center justify-center h-full text-white">Generating your website...</div>;
-    }
-
+    // --- UI RENDER (LIGHT THEME) ---
 
     return (
-        <div className="flex flex-col md:flex-row w-full h-full gap-4">
+        <div className="flex flex-col lg:flex-row w-full h-[calc(100dvh-5rem)] gap-4 p-2 lg:p-4">
+            
+            {/* --- LEFT SIDEBAR (Controls) --- */}
+            <div className={`flex flex-col gap-4 transition-all duration-300 ease-in-out
+                ${isPreviewMaximized ? 'hidden' : 'w-full lg:w-[28%] h-auto lg:h-full order-2 lg:order-1'}
+            `}>
+                
+                {/* Chat/History Area (Light Mode) */}
+                <div className="hidden lg:flex flex-1 flex-col rounded-xl border border-gray-200 bg-white p-4 overflow-y-auto shadow-sm">
+                    <h3 className="text-gray-900 text-sm font-semibold mb-2 uppercase tracking-wider">Editor Log</h3>
+                    <div className="text-xs text-gray-500 space-y-2 font-medium">
+                        {hasLoadedInitial && (
+                            <div className="flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                                <p>Project initialized</p>
+                            </div>
+                        )}
+                        <p className="opacity-60 italic">Waiting for input...</p>
+                    </div>
+                </div>
 
-            <div className={`md:w-[26%] relative flex-col ${isPreviewMaximized ? 'hidden' : 'flex'}`}>
-                <div className="flex-grow relative">
-                    <form onSubmit={handleSubmit} className="absolute bottom-4 left-0 w-full space-y-2">
+                {/* Input Area (Light Mode) */}
+                <div className="mt-auto w-full">
+                    <form onSubmit={handleSubmit} className="relative group">
                         <textarea
-                            className="border-2 w-full px-4 py-3 border-zinc-700 rounded-xl 
-                             scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-track-transparent resize-none 
-                             focus:outline-none focus:border-green-500 bg-transparent text-white transition-colors"
+                            className="w-full bg-white border border-gray-300 text-gray-900 rounded-xl px-4 py-3 pr-12
+                            placeholder:text-gray-400
+                            focus:outline-none focus:border-black focus:ring-1 focus:ring-black
+                            resize-none scrollbar-hide shadow-md transition-all min-h-[100px]"
                             name="text"
-                            placeholder="e.g., Change the background color to gray"
+                            placeholder="Describe what you want to change..."
                             value={prompt.text}
                             onChange={handleChange}
-                            rows={3}
                             disabled={isLoading}
                         />
+                        
+                        {/* Submit Button (Black Circle) */}
                         <button
                             type="submit"
-                            disabled={isLoading}
-                            className="w-full py-3 rounded-xl font-semibold text-lg
-                             bg-green-500 hover:bg-green-600 disabled:bg-zinc-600 disabled:cursor-not-allowed
-                             transition-all duration-200 ease-in-out"
+                            disabled={isLoading || !prompt.text.trim()}
+                            className="absolute bottom-3 right-3 p-2 rounded-lg bg-black text-white 
+                            disabled:bg-gray-200 disabled:text-gray-400 hover:bg-gray-800 transition-colors shadow-sm"
                         >
-                            {isLoading ? 'Generating...' : 'Submit'}
+                            {isLoading ? <LuLoader className="animate-spin" /> : <FiSend />}
                         </button>
-                        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     </form>
+                    {error && <p className="text-red-500 text-xs mt-2 ml-1 font-medium">{error}</p>}
                 </div>
             </div>
 
-            <div className={`transition-all duration-300 ease-in-out ${isPreviewMaximized ? 'w-full h-full' : 'md:w-[74%]'} flex flex-col items-center justify-between`}>
-                <div className="preview-screen w-full h-[calc(100%-4rem)] relative border-[1.4px] border-zinc-700 rounded-2xl overflow-hidden">
 
-                    <button onClick={toggleMaximize} className="absolute top-2 right-2 z-10 p-2 bg-black bg-opacity-40 rounded-full hover:bg-opacity-60 transition-all">
-                        {isPreviewMaximized ? (
-                            <TbArrowsDiagonalMinimize />
-                        ) : (
-                            <LuMaximize2 />
+            {/* --- RIGHT AREA (Preview) --- */}
+            <div className={`flex flex-col gap-3 transition-all duration-300 ease-in-out
+                ${isPreviewMaximized ? 'w-full h-full' : 'w-full lg:flex-1 h-[60vh] lg:h-full'}
+                order-1 lg:order-2 relative
+            `}>
+                
+                {/* Preview Window (Light Mode Frame) */}
+                <div className="relative flex-1 w-full bg-white rounded-xl overflow-hidden border border-gray-200 shadow-xl">
+                    
+                    {/* Header Bar (Light Gray) */}
+                    <div className="absolute top-0 left-0 right-0 h-10 bg-gray-50 flex items-center justify-between px-4 border-b border-gray-200 z-10">
+                        <div className="flex gap-1.5 opacity-80">
+                            <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500/20"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-400 border border-yellow-500/20"></div>
+                            <div className="w-3 h-3 rounded-full bg-green-400 border border-green-500/20"></div>
+                        </div>
+                        <span className="text-xs text-gray-400 font-medium tracking-wide">PREVIEW</span>
+                        <button onClick={toggleMaximize} className="text-gray-400 hover:text-black transition-colors">
+                            {isPreviewMaximized ? <TbArrowsDiagonalMinimize /> : <LuMaximize2 />}
+                        </button>
+                    </div>
+
+                    {/* Iframe */}
+                    <div className="w-full h-full pt-10 relative bg-white">
+                        {/* Loading Overlay (Light frosted glass) */}
+                        {isLoading && (
+                            <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/60 backdrop-blur-sm">
+                                <div className="bg-white text-black border border-gray-200 px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl">
+                                    <LuLoader className="animate-spin text-xl text-black" />
+                                    <span className="font-medium text-sm">Generating...</span>
+                                </div>
+                            </div>
                         )}
-                    </button>
-
-                    <iframe
-                        srcDoc={generatedHtml}
-                        title="Website Preview"
-                        className="w-full h-full border-0"
-                        sandbox="allow-scripts allow-same-origin"
-                    />
+                        
+                        <iframe
+                            srcDoc={generatedHtml}
+                            title="Website Preview"
+                            className="w-full h-full border-0"
+                            sandbox="allow-scripts allow-same-origin"
+                        />
+                    </div>
                 </div>
 
-                <div className="download-btn w-full flex justify-center mt-2">
-                    <button
-                        onClick={handleDownload}
-                        className="flex justify-center items-center gap-2 border-[1.4px] text-lg font-semibold
-                         px-8 py-3 rounded-full duration-200 ease-in-out hover:text-black border-zinc-700
-                         hover:bg-[linear-gradient(45deg,_rgba(65,89,208,1)_0%,_rgba(200,79,192,1)_50%,_rgba(255,205,112,1)_100%)]"
-                    >
-                        Download
-                    </button>
-                </div>
+                {/* Download Button (Light Mode - Black Button) */}
+                {!isPreviewMaximized && (
+                    <div className="flex justify-end">
+                        <button
+                            onClick={handleDownload}
+                            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-black text-white
+                            hover:bg-gray-800 font-medium text-sm transition-all shadow-lg active:scale-95"
+                        >
+                            <FiDownload /> Download Code
+                        </button>
+                    </div>
+                )}
             </div>
+
         </div>
     );
 };
 
-
-// Main page component remains clean, handling the overall structure and Suspense
+// Page Wrapper (Light Gray Background)
 const Page = () => {
     return (
-        <div className="relative min-h-screen bg-[#0c0c0c] text-white overflow-hidden">
-            <MockNavbar />
-            <div className="w-full h-[calc(100vh-4rem)] mt-2 px-[2vw]">
-                <Suspense fallback={<div className="flex items-center justify-center h-full text-white">Loading Preview...</div>}>
+        <div className="min-h-screen bg-gray-50 text-gray-900 overflow-hidden flex flex-col">
+            <Navbar />
+            <div className="flex-1 w-full max-w-[1920px] mx-auto">
+                <Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">Loading...</div>}>
                     <PreviewContent />
                 </Suspense>
             </div>

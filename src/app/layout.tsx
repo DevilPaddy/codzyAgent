@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
+import { ReactLenis } from "lenis/react";
 import "./globals.css";
+import { AuthProvider } from "./providers";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
@@ -25,9 +29,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${playfair.variable}`}
       >
-        {children}
+        <ReactLenis root />
+        <div className="fixed top-0 left-0 w-full max-h-[4rem] z-50">
+          <Navbar />
+        </div>
+        <div className="mb-[4rem] mx-auto">
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </div>
+        <Footer />
       </body>
     </html>
   );
