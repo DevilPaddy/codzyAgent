@@ -73,7 +73,7 @@ textarea {
 }
 
 .hero-title-txt {
-  font-size: clamp(3rem, 3em + 1rem, 6rem);
+  font-size: clamp(2.5rem, 3em + 1rem, 6rem);
   font-weight: bolder;
   text-align: center;
 }
@@ -131,5 +131,13 @@ textarea {
   .hero-cover {
     width: 100%;
     padding: 0.2em;
+  }
+
+  .hero-title-txt{
+    font-size: 2.4rem;
+  }
+
+  .btn-sec{
+    gap: 1.2em;
   }
 }
