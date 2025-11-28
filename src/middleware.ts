@@ -11,11 +11,11 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = !!token;
   const { pathname } = req.nextUrl;
 
-  const protectedRoutes = ['/so', '/preview', '/formpage'];
-  const authRoutes = ['/login', '/signup'];
+  const protectedRoutes = ['/preview', '/formpage'];
+  const authRoutes = ['/login', '/signup',];
 
   if (isAuthenticated && authRoutes.some(route => pathname.startsWith(route))) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+    return NextResponse.redirect(new URL('/', req.url));
   }
 
   if (!isAuthenticated && protectedRoutes.some(route => pathname.startsWith(route))) {

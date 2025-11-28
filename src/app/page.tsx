@@ -18,7 +18,7 @@ export default function () {
       <LogedPage />
     )
   }
-  
+
   return (
     <div className="max-w-[1152px] mx-auto">
       <section className="userIsNotLogged">
