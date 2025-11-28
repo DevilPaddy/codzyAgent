@@ -33,7 +33,7 @@ const LogedPage = () => {
     if (session?.user?.email) {
       const fetchProjects = async () => {
         try {
-          const res = await fetch('/api/project/save');
+          const res = await fetch('/api/project/list');
           if (res.ok) {
             const data = await res.json();
             setProjects(data.projects);
