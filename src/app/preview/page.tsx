@@ -6,7 +6,7 @@ import { LuMaximize2, LuLoader } from "react-icons/lu";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
 import { FiDownload, FiSend, FiSave } from "react-icons/fi"; 
 
-const API_BASE_URL = process.env.AI_URL;
+const API_BASE_URL = "http://54.162.30.59:5000";
 
 const PreviewContent = () => {
     const searchParams = useSearchParams();
