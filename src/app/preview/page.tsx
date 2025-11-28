@@ -4,9 +4,9 @@ import { useSearchParams } from 'next/navigation'
 import Navbar from '../../../components/Navbar' 
 import { LuMaximize2, LuLoader } from "react-icons/lu";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
-import { FiDownload, FiSend, FiSave } from "react-icons/fi"; // Added FiSave icon
+import { FiDownload, FiSend, FiSave } from "react-icons/fi"; 
 
-const API_BASE_URL = 'http://23.20.239.239:5000';
+const API_BASE_URL = process.env.AI_URL;
 
 const PreviewContent = () => {
     const searchParams = useSearchParams();
@@ -14,14 +14,13 @@ const PreviewContent = () => {
 
     const [prompt, setPrompt] = useState({ text: '' });
     const [isLoading, setIsLoading] = useState(false);
-    // New state for saving process
     const [isSaving, setIsSaving] = useState(false); 
     const [generatedHtml, setGeneratedHtml] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isPreviewMaximized, setIsPreviewMaximized] = useState(false);
     const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
 
-    // Initial Load Effect
+    
     useEffect(() => {
         if (initialPrompt && !hasLoadedInitial) {
             const generateInitialWebsite = async () => {
@@ -88,18 +87,16 @@ const PreviewContent = () => {
         handleGenerate();
     };
 
-    // --- UPDATED DOWNLOAD & SAVE FUNCTION ---
     const handleDownloadAndSave = useCallback(async () => {
         if (!generatedHtml) {
             alert("No content to download.");
             return;
         }
 
-        setIsSaving(true); // Start loading state for button
+        setIsSaving(true); 
 
         try {
-            // 1. Save to Database (MongoDB)
-            // We give it a timestamped name, or you could add an input field for this
+
             const projectName = `Project ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`;
             
             const saveResponse = await fetch('/api/project/save', {
@@ -112,11 +109,9 @@ const PreviewContent = () => {
             });
 
             if (!saveResponse.ok) {
-                // If save fails (e.g., not logged in), we log it but usually still allow download
                 console.error("Failed to save project to history.");
             }
 
-            // 2. Download File to Computer
             const blob = new Blob([generatedHtml], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -131,23 +126,21 @@ const PreviewContent = () => {
             console.error("Error during save/download:", err);
             alert("Something went wrong, please try again.");
         } finally {
-            setIsSaving(false); // Stop loading state
+            setIsSaving(false); 
         }
     }, [generatedHtml]);
 
     const toggleMaximize = () => setIsPreviewMaximized(!isPreviewMaximized);
 
-    // --- UI RENDER (LIGHT THEME) ---
+ 
 
     return (
         <div className="flex flex-col lg:flex-row w-full h-[calc(100dvh-5rem)] gap-4 p-2 lg:p-4">
             
-            {/* --- LEFT SIDEBAR (Controls) --- */}
             <div className={`flex flex-col gap-4 transition-all duration-300 ease-in-out
                 ${isPreviewMaximized ? 'hidden' : 'w-full lg:w-[28%] h-auto lg:h-full order-2 lg:order-1'}
             `}>
                 
-                {/* Chat/History Area (Light Mode) */}
                 <div className="hidden lg:flex flex-1 flex-col rounded-xl border border-gray-200 bg-white p-4 overflow-y-auto shadow-sm">
                     <h3 className="text-gray-900 text-sm font-semibold mb-2 uppercase tracking-wider">Editor Log</h3>
                     <div className="text-xs text-gray-500 space-y-2 font-medium">
@@ -161,7 +154,6 @@ const PreviewContent = () => {
                     </div>
                 </div>
 
-                {/* Input Area (Light Mode) */}
                 <div className="mt-auto w-full">
                     <form onSubmit={handleSubmit} className="relative group">
                         <textarea
@@ -176,7 +168,6 @@ const PreviewContent = () => {
                             disabled={isLoading}
                         />
                         
-                        {/* Submit Button (Black Circle) */}
                         <button
                             type="submit"
                             disabled={isLoading || !prompt.text.trim()}
@@ -191,16 +182,13 @@ const PreviewContent = () => {
             </div>
 
 
-            {/* --- RIGHT AREA (Preview) --- */}
             <div className={`flex flex-col gap-3 transition-all duration-300 ease-in-out
                 ${isPreviewMaximized ? 'w-full h-full' : 'w-full lg:flex-1 h-[60vh] lg:h-full'}
                 order-1 lg:order-2 relative
             `}>
                 
-                {/* Preview Window (Light Mode Frame) */}
                 <div className="relative flex-1 w-full bg-white rounded-xl overflow-hidden border border-gray-200 shadow-xl">
                     
-                    {/* Header Bar (Light Gray) */}
                     <div className="absolute top-0 left-0 right-0 h-10 bg-gray-50 flex items-center justify-between px-4 border-b border-gray-200 z-10">
                         <div className="flex gap-1.5 opacity-80">
                             <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500/20"></div>
@@ -213,9 +201,7 @@ const PreviewContent = () => {
                         </button>
                     </div>
 
-                    {/* Iframe */}
                     <div className="w-full h-full pt-10 relative bg-white">
-                        {/* Loading Overlay (Light frosted glass) */}
                         {isLoading && (
                             <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/60 backdrop-blur-sm">
                                 <div className="bg-white text-black border border-gray-200 px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl">
@@ -234,12 +220,11 @@ const PreviewContent = () => {
                     </div>
                 </div>
 
-                {/* Download Button (Updated with Save Logic) */}
                 {!isPreviewMaximized && (
                     <div className="flex justify-end">
                         <button
                             onClick={handleDownloadAndSave}
-                            disabled={isSaving} // Disable while saving
+                            disabled={isSaving} 
                             className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-black text-white
                             hover:bg-gray-800 disabled:bg-gray-400 font-medium text-sm transition-all shadow-lg active:scale-95"
                         >
@@ -261,7 +246,6 @@ const PreviewContent = () => {
     );
 };
 
-// Page Wrapper (Light Gray Background)
 const Page = () => {
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 overflow-hidden flex flex-col">
