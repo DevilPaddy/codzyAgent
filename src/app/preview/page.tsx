@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import Navbar from '../../../components/Navbar' 
 import { LuMaximize2, LuLoader } from "react-icons/lu";
 import { TbArrowsDiagonalMinimize } from "react-icons/tb";
-import { FiDownload, FiSend } from "react-icons/fi";
+import { FiDownload, FiSend, FiSave } from "react-icons/fi"; // Added FiSave icon
 
 const API_BASE_URL = 'http://23.20.239.239:5000';
 
@@ -14,6 +14,8 @@ const PreviewContent = () => {
 
     const [prompt, setPrompt] = useState({ text: '' });
     const [isLoading, setIsLoading] = useState(false);
+    // New state for saving process
+    const [isSaving, setIsSaving] = useState(false); 
     const [generatedHtml, setGeneratedHtml] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isPreviewMaximized, setIsPreviewMaximized] = useState(false);
@@ -86,20 +88,51 @@ const PreviewContent = () => {
         handleGenerate();
     };
 
-    const handleDownload = useCallback(() => {
+    // --- UPDATED DOWNLOAD & SAVE FUNCTION ---
+    const handleDownloadAndSave = useCallback(async () => {
         if (!generatedHtml) {
             alert("No content to download.");
             return;
         }
-        const blob = new Blob([generatedHtml], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'codzy-project.html';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+
+        setIsSaving(true); // Start loading state for button
+
+        try {
+            // 1. Save to Database (MongoDB)
+            // We give it a timestamped name, or you could add an input field for this
+            const projectName = `Project ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`;
+            
+            const saveResponse = await fetch('/api/project/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    projectName: projectName,
+                    htmlCode: generatedHtml
+                })
+            });
+
+            if (!saveResponse.ok) {
+                // If save fails (e.g., not logged in), we log it but usually still allow download
+                console.error("Failed to save project to history.");
+            }
+
+            // 2. Download File to Computer
+            const blob = new Blob([generatedHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'codzy-project.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+        } catch (err) {
+            console.error("Error during save/download:", err);
+            alert("Something went wrong, please try again.");
+        } finally {
+            setIsSaving(false); // Stop loading state
+        }
     }, [generatedHtml]);
 
     const toggleMaximize = () => setIsPreviewMaximized(!isPreviewMaximized);
@@ -201,15 +234,24 @@ const PreviewContent = () => {
                     </div>
                 </div>
 
-                {/* Download Button (Light Mode - Black Button) */}
+                {/* Download Button (Updated with Save Logic) */}
                 {!isPreviewMaximized && (
                     <div className="flex justify-end">
                         <button
-                            onClick={handleDownload}
+                            onClick={handleDownloadAndSave}
+                            disabled={isSaving} // Disable while saving
                             className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-black text-white
-                            hover:bg-gray-800 font-medium text-sm transition-all shadow-lg active:scale-95"
+                            hover:bg-gray-800 disabled:bg-gray-400 font-medium text-sm transition-all shadow-lg active:scale-95"
                         >
-                            <FiDownload /> Download Code
+                            {isSaving ? (
+                                <>
+                                    <LuLoader className="animate-spin" /> Saving...
+                                </>
+                            ) : (
+                                <>
+                                    <FiDownload /> Download Code
+                                </>
+                            )}
                         </button>
                     </div>
                 )}
