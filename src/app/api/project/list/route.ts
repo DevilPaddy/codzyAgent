@@ -1,12 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-// Adjust this path to point to your auth route
 import { authOptions } from "../../auth/[...nextauth]/route"; 
 import mongoose from "mongoose";
 
-// IMPORT FIX:
-// Since you are in src/app/api/project/list/route.ts
-// And your model is likely in src/model/Project.ts
 import Project from "../../../../../model/Project";
 
 

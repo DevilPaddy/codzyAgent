@@ -3,7 +3,7 @@ import React from 'react';
 
 const Tutorials = () => {
   return (
-    <div className="w-full mt-[8rem]">
+    <div className="w-full mt-[10rem]">
       <h6 className="m-4 text-lg text-black font-semibold mb-4">Tutorials:</h6>
 
       <div className="grid grid-cols-1 gap-8 mb-8 px-4 md:px-8">
