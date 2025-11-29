@@ -32,15 +32,17 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable}`}
       >
         <ReactLenis root />
+        <AuthProvider>
         <div className="fixed top-0 left-0 w-full max-h-[4rem] z-50">
           <Navbar />
         </div>
         <div className="mb-[4rem] mx-auto">
-          <AuthProvider>
+          
             {children}
-          </AuthProvider>
+          
         </div>
         <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
