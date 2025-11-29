@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = !!token;
   const { pathname } = req.nextUrl;
 
-  const protectedRoutes = ['/preview', '/formpage'];
+  const protectedRoutes = ['/preview', '/formpage', '/profile'];
   const authRoutes = ['/login', '/signup',];
 
   if (isAuthenticated && authRoutes.some(route => pathname.startsWith(route))) {
