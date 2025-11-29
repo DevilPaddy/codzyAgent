@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const Tutorials = () => {
@@ -7,7 +8,9 @@ const Tutorials = () => {
 
       <div className="grid grid-cols-1 gap-8 mb-8 px-4 md:px-8">
         {/* Tutorial 1 */}
-        <div>
+        <Link
+        href={'https://youtu.be/MIF_WQ400cY'}
+        >
           <div
             className="w-full h-[28rem] sm:h-[30rem] md:h-[33rem] rounded-[12px] bg-no-repeat bg-contain bg-center bg-[#EEEFF3] border-[1px]
             hover:scale-[102%] ease-in-out duration-150 border-zinc-500 p-4 sm:p-6 md:p-8 flex flex-col justify-between items-start"
@@ -20,7 +23,7 @@ const Tutorials = () => {
               <p className='font-semibold text-zinc-700'>Watch Tutorial👉</p>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Tutorial 2 */}
         <div>
